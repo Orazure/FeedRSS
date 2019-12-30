@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+{% for user in query %}
+<h1> {{ user.username }}</h1>
+
+{% endfor %}
+
+{% endblock %}
