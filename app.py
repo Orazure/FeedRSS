@@ -21,6 +21,10 @@ app.secret_key="root"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager._login_disabled = False
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
 
 #------------------#
 
@@ -40,12 +44,27 @@ def dashboard():
     return render_template('user.html',query=query)
 
 
+@app.route('/add_feed', methods=['GET', 'POST'])
+@login_required
+def add_feed():
+    myfeed=feed()
+    user_id = current_user.get_id() # return username in get_id()
+    print("",user_id)
+    form=FeedForm()
+    form.user_feed=user_id
+    if form.validate_on_submit():
+        form.populate_obj(myfeed)
+        myfeed.save()
+        flash('Hooray ! Boardgame created !')
+        return redirect(url_for('index'))
+    return render_template('index.html',form=form)
+
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    flash("ici")
     if form.validate_on_submit():
         user=User()
         # Login and validate the user.
@@ -68,7 +87,6 @@ def signup():
         flash('Votre compte est crée')
         return redirect(url_for('dashboard'))
     return render_template('index.html', form=form)
-
 
 
 @app.route('/logout')
@@ -101,14 +119,14 @@ def dropdb():
 
 
 
-@login_manager.unauthorized_handler
-def unauthorized_handler():
-    return 'Unauthorized'
+
 
 @app.errorhandler(404)
 def notfound():
     """Serve 404 template."""
     return make_response(render_template("404.html"), 404)
+
+app.debug = True
 
 if __name__=='__main__':
     app.run()
