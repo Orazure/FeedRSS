@@ -9,13 +9,12 @@ verify_ssl = true
 flask = "*"
 peewee = "*"
 requests = "*"
-flask-wtf = "*"
+wtforms = "*"
 wtfpeewee = "*"
 wtf-peewee = "*"
+flask-wtf = "*"
 flask-login = "*"
-forms = "*"
-form = "*"
-sqlite3 = "*"
+flask-bcrypt = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
