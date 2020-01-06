@@ -1,4 +1,3 @@
-
 # IMPORT AND FROM #
 import requests,click,wtforms
 
@@ -28,9 +27,8 @@ login_manager._login_disabled = False
 def load_user(user_id):
     try:
         return User.get(user_id)
-        print("ici fdp")
     except :
-        return "va te faire enculer 2"
+        return "Error account"
     
 #------------------#
 
