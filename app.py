@@ -52,11 +52,9 @@ def dashboard():
 @login_required
 def add_feed():
     user_id = current_user.get_id() # return username in get_id()
-    myfeed=feed()
     form=FeedForm()
-    form.user_feed=user_id
     if form.validate_on_submit():
-        form.populate_obj(myfeed)
+        myfeed=feed(feed_nom=form.feed_nom.data,feed_url=form.feed_url.data,feed_date=form.feed_date.data,user_feed=user_id)
         myfeed.save()
         flash('Your feed is save !!')
         return redirect(url_for('index'))
