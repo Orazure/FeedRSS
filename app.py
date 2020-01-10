@@ -41,22 +41,33 @@ def index():
         return redirect(url_for('signup'))
     return render_template('base.html')
 
-@app.route('/nombre_user')
-def dashboard():
-    query=User.select()
-    return render_template('user.html',query=query)
 
-@app.route('/all_feed', methods=['GET', 'POST'])
+
+@app.route('/feed/all_feed', methods=['GET', 'POST'])
 @login_required
 def All_feed():
-    
+    try:
+        user_id = current_user.get_id() # return username in get_id()
+    except Entry.DoesNotExist:
+        abort(404)
+    query=feed.select(feed.feed_url).where(feed.user_feed==user_id)
+    print(query)
+    for dd in query:
+        print(dd)
+    return render_template('vue_all_feed.html',query=query)
+
+
+
 
 
 
 @app.route('/add_feed', methods=['GET', 'POST'])
 @login_required
 def add_feed():
-    user_id = current_user.get_id() # return username in get_id()
+    try:
+        user_id = current_user.get_id() # return username in get_id()
+    except Entry.DoesNotExist:
+        abort(404)
     form=FeedForm()
     if form.validate_on_submit():
         myfeed=feed(feed_nom=form.feed_nom.data,feed_url=form.feed_url.data,feed_date=form.feed_date.data,user_feed=user_id)
@@ -75,7 +86,7 @@ def login():
         try:
             user =User.get(User.user_username == form.username.data)
             if user.user_password==form.password.data:
-                user.is_authenticated = True
+                #user.is_authenticated = True
                 login_user(user)
                 session['username'] = request.form['username']
                 flash("You're now logged in!")

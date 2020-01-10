@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import SelectField,PasswordField,BooleanField,SubmitField,StringField,DateField
 from wtforms.fields.html5 import DateField
-from wtforms.validators import DataRequired,Length
+from wtforms.validators import DataRequired,Length,EqualTo
 from wtfpeewee.orm import model_form
 import wtforms
 from test.models import User,feed
@@ -11,20 +11,15 @@ SimpleFeedForm=model_form(feed)
 
 class UserForm(FlaskForm):
     user_username = StringField('Username', validators=[DataRequired(), Length(min=3, max=20)])
-    user_password = PasswordField('New Password', [
-        validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')
-    ])
+    user_password = PasswordField(' Password', validators=[DataRequired(),EqualTo('password2', message='Passwords must match')])
+    password2 = PasswordField('Confirm password', validators=[DataRequired()])
+    
 
 
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
-    password = 
-    PasswordField('New Password', [
-        validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')
-    ])
+    password = PasswordField(' Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
