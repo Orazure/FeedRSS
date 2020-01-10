@@ -59,7 +59,7 @@ def All_feed():
 
 
 
-
+efafe
 
 @app.route('/add_feed', methods=['GET', 'POST'])
 @login_required
