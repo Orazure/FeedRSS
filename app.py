@@ -46,6 +46,12 @@ def dashboard():
     query=User.select()
     return render_template('user.html',query=query)
 
+@app.route('/all_feed', methods=['GET', 'POST'])
+@login_required
+def All_feed():
+    
+
+
 
 @app.route('/add_feed', methods=['GET', 'POST'])
 @login_required

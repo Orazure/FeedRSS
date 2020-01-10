@@ -11,13 +11,20 @@ SimpleFeedForm=model_form(feed)
 
 class UserForm(FlaskForm):
     user_username = StringField('Username', validators=[DataRequired(), Length(min=3, max=20)])
-    user_password =PasswordField('Password', validators=[DataRequired(),Length(min=3, max=20)])
+    user_password = PasswordField('New Password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
 
 
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    password = 
+    PasswordField('New Password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
