@@ -56,7 +56,6 @@ def All_feed():
         for _url in liste_url:  
             url_parse=str(_url).strip('[]')
             url=feedparser.parse(url_parse)
-            
             print(url.feed.title)
             return render_template("vue_all_feed.html",url=url)
     else:
