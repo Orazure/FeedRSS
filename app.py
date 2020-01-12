@@ -1,4 +1,4 @@
-import requests,click,wtforms
+import requests,click,wtforms,feedparser,numpy
 
 from peewee import *
 from wtfpeewee.orm import model_form
@@ -51,10 +51,16 @@ def All_feed():
     except Entry.DoesNotExist:
         abort(404)
     query=feed.select(feed.feed_url).where(feed.user_feed==user_id)
-    print(query)
-    for dd in query:
-        print(dd)
-    return render_template('vue_all_feed.html',query=query)
+    liste_url=[key.feed_url for key in query]
+    if(len(liste_url)>0):
+        for _url in liste_url:  
+            url_parse=str(_url).strip('[]')
+            url=feedparser.parse(url_parse)
+            print(url.feed.title)
+            return render_template("vue_all_feed.html",url=url)
+    else:
+        flash("You have not feed,created it")
+        return render_template(url_for("index"))
 
 
 

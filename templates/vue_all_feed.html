@@ -2,8 +2,10 @@
 
 {% block body %}
 
-{% for dd in query %}
-<p> {{ dd.feed_url }}</p>
+{% for param in url %}
+<h1> {{ param.title }}</h1>
+
+
 {% endfor %}
 
 {% endblock %}
