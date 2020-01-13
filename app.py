@@ -1,5 +1,6 @@
-import requests,click,wtforms,feedparser,numpy
+import requests,click,wtforms,feedparser,random
 
+from flask_restful import Resource, Api
 from peewee import *
 from wtfpeewee.orm import model_form
 from flask_wtf import FlaskForm
@@ -16,6 +17,7 @@ from test.models import User,feed,create_tables,drop_tables,database
 # PARAMETERS #
 app=Flask(__name__)
 app.secret_key="root"
+api = Api(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -50,22 +52,33 @@ def All_feed():
         user_id = current_user.get_id() # return username in get_id()
     except Entry.DoesNotExist:
         abort(404)
-    query=feed.select(feed.feed_url).where(feed.user_feed==user_id)
+    query=feed.select().where(feed.user_feed==user_id)
+    dic={}
     liste_url=[key.feed_url for key in query]
     if(len(liste_url)>0):
         for _url in liste_url:  
-            url_parse=str(_url).strip('[]')
-            url=feedparser.parse(url_parse)
-            print(url.feed.title)
-            return render_template("vue_all_feed.html",url=url)
+            dic=feedparser.parse(_url).entries
     else:
         flash("You have not feed,created it")
         return render_template(url_for("index"))
+    return render_template("vue_all_feed.html",dic=dic)
 
+@app.route('/feed/feed', methods=['GET', 'POST'])
+@login_required
+def feed_():
+    try:
+        user_id = current_user.get_id() # return username in get_id()
+    except Entry.DoesNotExist:
+        abort(404)
+    query=feed.select(feed_nom,feed_url).where(feed.user_feed==user_id)
+    print(query)
+    liste_url=[key.feed_nom,feed_url for key in query]
+    print(liste_url)
+    for d in liste_url:
+        print(d.feed_nom)
+    return render_template("vue_feed.html",liste_url=liste_url)
+   
 
-
-
-efafe
 
 @app.route('/add_feed', methods=['GET', 'POST'])
 @login_required
@@ -141,6 +154,8 @@ def dropdb():
     """Drop database tables"""
     drop_tables()
     click.echo('Dropped tables from database')
+
+    
 
 
 if __name__=='__main__':

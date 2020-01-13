@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% block body %}
-
-{% for param in url %}
-<h1> {{ param.title }}</h1>
-
+{% for e in dic %}
+<h1>{{ e.title }}</h1>
+<p>{{ e.published }}</p>
+<p><a href="{{ e.link }}">Liens de l'article</a></p>
 
 {% endfor %}
 

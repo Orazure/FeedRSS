@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+{% for e in liste_url %}
+<h1>{{ e.feed_nom }}</h1>
+<p>{{ e.feed_url }}</p>
+
+{% endfor %}
+
+{% endblock %}

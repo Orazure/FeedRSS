@@ -18,6 +18,8 @@ form = "*"
 sqlite3 = "*"
 feedparser = "*"
 numpy = "*"
+random = "*"
+flask-restful = "*"
 
 [requires]
 python_version = "3.8"
