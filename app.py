@@ -70,12 +70,11 @@ def feed_():
         user_id = current_user.get_id() # return username in get_id()
     except Entry.DoesNotExist:
         abort(404)
-    query=feed.select(feed_nom,feed_url).where(feed.user_feed==user_id)
+    query=feed.select().where(feed.user_feed==user_id)
     print(query)
-    liste_url=[key.feed_nom,feed_url for key in query]
-    print(liste_url)
-    for d in liste_url:
-        print(d.feed_nom)
+    liste_url=[(key.feed_nom,key.feed_url) for key in query]
+    print(type(liste_url))
+    
     return render_template("vue_feed.html",liste_url=liste_url)
    
 
