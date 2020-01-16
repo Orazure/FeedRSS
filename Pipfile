@@ -20,6 +20,7 @@ feedparser = "*"
 numpy = "*"
 random = "*"
 flask-restful = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.8"
