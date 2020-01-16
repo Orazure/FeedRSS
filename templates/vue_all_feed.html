@@ -8,4 +8,14 @@
 
 {% endfor %}
 
+<h2>My Feed</h2>
+{% for key,value in liste_feed_dic.items() %}
+<a href="{{ url_for('feed_nom', slug=key) }}">
+    <p>{{ key }}</p>
+</a>
+<p>{{ value }}</p>
+
+
+{% endfor %}
+
 {% endblock %}
