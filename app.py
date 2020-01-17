@@ -1,5 +1,7 @@
-import requests,click,wtforms,feedparser,random
+import requests,click,wtforms,feedparser,random,logging
 
+from bs4 import BeautifulSoup
+from log import *
 from flask_restful import Resource, Api
 from peewee import *
 from wtfpeewee.orm import model_form
@@ -58,6 +60,9 @@ def All_feed():
     if(len(liste_url)>0):
         for _url in liste_url:  
             dic=feedparser.parse(_url).entries
+            image=feedparser.parse(_url)
+            e = image['entries']
+            logger.debug("Feed (all) : %s",e)
     else:
         flash("You have not feed,created it")
         return render_template(url_for("index"))
@@ -88,6 +93,7 @@ def feed_nom(slug):
     if(len(liste_url)>0):
         for _url in liste_url:  
             dic=feedparser.parse(_url).entries
+            logger.debug(" un Feed (slug) : %s",dic)
     else:
         flash("Not found this feed")
         return render_template(url_for("All_feed"))
@@ -157,6 +163,8 @@ def logout():
 @login_manager.unauthorized_handler
 def unauthorized():
     return "Impossible !! You must first login to access it"
+
+
 
 # FONCTIONS #
 

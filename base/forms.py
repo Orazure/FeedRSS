@@ -4,7 +4,7 @@ from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired,Length,EqualTo
 from wtfpeewee.orm import model_form
 import wtforms
-from test.models import User,feed
+from base.models import User,feed
 
 SimpleUserForm=model_form(User)
 SimpleFeedForm=model_form(feed)
