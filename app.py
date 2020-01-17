@@ -118,7 +118,7 @@ def add_feed():
         return redirect(url_for('index'))
     return render_template('index.html',form=form)
 
-
+      
 
 
 @app.route('/login', methods=['GET', 'POST'])
