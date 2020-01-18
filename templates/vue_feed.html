@@ -2,8 +2,9 @@
 
 {% block body %}
 
-{% for e in liste_url %}
-<h1>{{ e }}</h1>
+{% for key,value in dd.items() %}
+<h1>{{ key }}</h1>
+<p>{{ value }}</p>
 
 
 {% endfor %}

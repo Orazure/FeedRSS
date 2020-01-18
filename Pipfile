@@ -20,6 +20,9 @@ feedparser = "*"
 numpy = "*"
 random = "*"
 flask-restful = "*"
+pytest = "*"
+logging = "*"
+beautifulsoup4 = "*"
 
 [requires]
 python_version = "3.8"

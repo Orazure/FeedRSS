@@ -1,13 +1,15 @@
-import requests,click,wtforms,feedparser,random
+import requests,click,wtforms,feedparser,random,logging
 
+from bs4 import BeautifulSoup
+from log import *
 from flask_restful import Resource, Api
 from peewee import *
 from wtfpeewee.orm import model_form
 from flask_wtf import FlaskForm
 from flask import Flask, flash, redirect, render_template, request, url_for,session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from test.forms import *
-from test.models import User,feed,create_tables,drop_tables,database
+from base.forms import *
+from base.models import User,feed,create_tables,drop_tables,database
 
 
 
@@ -58,25 +60,47 @@ def All_feed():
     if(len(liste_url)>0):
         for _url in liste_url:  
             dic=feedparser.parse(_url).entries
+            image=feedparser.parse(_url)
+            e = image['entries']
+            logger.debug("Feed (all) : %s",e)
     else:
         flash("You have not feed,created it")
         return render_template(url_for("index"))
-    return render_template("vue_all_feed.html",dic=dic)
+    return render_template("vue_all_feed.html",dic=dic,liste_feed_dic=feed_nom_url())
 
 @app.route('/feed/feed', methods=['GET', 'POST'])
 @login_required
-def feed_():
+def feed_nom_url():
     try:
         user_id = current_user.get_id() # return username in get_id()
     except Entry.DoesNotExist:
         abort(404)
     query=feed.select().where(feed.user_feed==user_id)
-    print(query)
-    liste_url=[(key.feed_nom,key.feed_url) for key in query]
-    print(type(liste_url))
-    
-    return render_template("vue_feed.html",liste_url=liste_url)
+    liste_feed=[(key.feed_nom,key.feed_url) for key in query]
+    liste_feed_dic=dict(liste_feed)
+    return liste_feed_dic
    
+@app.route('/feed/<slug>', methods=['GET', 'POST'])
+@login_required
+def feed_nom(slug):
+    try:
+        user_id = current_user.get_id() # return username in get_id()
+    except Entry.DoesNotExist:
+        abort(404)
+    query=feed.select(feed.feed_url).where(feed.user_feed==user_id,feed.feed_nom==slug)
+    dic={}
+    liste_url=[key.feed_url for key in query]
+    if(len(liste_url)>0):
+        for _url in liste_url:  
+            dic=feedparser.parse(_url).entries
+            logger.debug(" un Feed (slug) : %s",dic)
+    else:
+        flash("Not found this feed")
+        return render_template(url_for("All_feed"))
+    return render_template("vue_all_feed.html",dic=dic,liste_feed_dic=feed_nom_url())
+
+
+
 
 
 @app.route('/add_feed', methods=['GET', 'POST'])
@@ -94,7 +118,7 @@ def add_feed():
         return redirect(url_for('index'))
     return render_template('index.html',form=form)
 
-
+      
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -140,6 +164,8 @@ def logout():
 def unauthorized():
     return "Impossible !! You must first login to access it"
 
+
+
 # FONCTIONS #
 
 @app.cli.command()
@@ -153,8 +179,6 @@ def dropdb():
     """Drop database tables"""
     drop_tables()
     click.echo('Dropped tables from database')
-
-    
 
 
 if __name__=='__main__':
