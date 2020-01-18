@@ -2,18 +2,19 @@
 
 {% block body %}
 {% for e in dic %}
-<h1>{{ e.title }}</h1>
-<p>{{ e.published }}</p>
+<p>titre {{ e.title }}</p>
+<p> publication{{ e.published }}</p>
+<p>Description{{ e.summary }}</p>
 <p><a href="{{ e.link }}">Liens de l'article</a></p>
 <img src="" alt="texte si l'image n'est pas affichée">
-{{ e.media_thumbnail }}
+
 {% endfor %}
 
 <h2>My Feed</h2>
 {% for key,value in liste_feed_dic.items() %}
 <a href="{{ url_for('feed_nom', slug=key) }}">
     <p>{{ key }}</p>
-</a>
+</a>    
 <p>{{ value }}</p>
 
 
