@@ -1,6 +1,6 @@
 import requests,click,wtforms,feedparser,random,logging
 
-
+from base.feed import *
 from log import *
 from flask_restful import Resource, Api
 from peewee import *
@@ -56,15 +56,19 @@ def All_feed():
         abort(404)
     query=feed.select().where(feed.user_feed==user_id)
     dic={}
+    dicd={}
     liste_url=[key.feed_url for key in query]
     if(len(liste_url)>0):
         for _url in liste_url:  
+            feedparser.RESOLVE_RELATIVE_URIS = 1
             dic=feedparser.parse(_url).entries
-            logger.debug("Feed (all) : %s")
+            parsed=feedparser.parse(_url)
+            parrsed=get_source(parsed)
+            logger.debug("Feed (all) : %s",parrsed)
     else:
         flash("You have not feed,created it")
-        return render_template(url_for("index"))
-    return render_template("vue_all_feed.html",dic=dic,liste_feed_dic=feed_nom_url())
+        return render_template(url_for("index"))    
+    return render_template("vue_all_feed.html",dic=dic,liste_feed_dic=feed_nom_url(),parrsed=parrsed)
 
 @app.route('/feed/feed', methods=['GET', 'POST'])
 @login_required
@@ -86,11 +90,12 @@ def feed_nom(slug):
     except Entry.DoesNotExist:
         abort(404)
     query=feed.select(feed.feed_url).where(feed.user_feed==user_id,feed.feed_nom==slug)
-    dic={}
+  
     liste_url=[key.feed_url for key in query]
     if(len(liste_url)>0):
         for _url in liste_url:  
             dic=feedparser.parse(_url).entries
+            logger.debug("c'est la merde %s")
     else:
         flash("Not found this feed")
         return render_template(url_for("All_feed"))

@@ -1,14 +1,31 @@
 {% extends "base.html" %}
 
 {% block body %}
+
 {% for e in dic %}
-<p>titre {{ e.title }}</p>
+<h1>titre {{ e.title }}</h1>
 <p> publication{{ e.published }}</p>
 <p>Description{{ e.summary }}</p>
 <p><a href="{{ e.link }}">Liens de l'article</a></p>
-<img src="" alt="texte si l'image n'est pas affichée">
+<img src={{e.summary_detail.image}} alt=" l'image n'est pas affichée">
+<p>fff{{ e.content  }}</p>
+<p>fff{{ e.media_content  }}</p>
 
 {% endfor %}
+
+
+{% for ab in parrsed %}
+<p> {{ ab.title }}</p>
+<p> {{ ab.subtitle }}</p>
+<p> {{ ab.image }}</p>
+{% endfor %}
+
+
+
+
+
+
+
 
 <h2>My Feed</h2>
 {% for key,value in liste_feed_dic.items() %}
