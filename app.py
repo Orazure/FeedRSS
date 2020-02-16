@@ -13,9 +13,6 @@ from base.models import User,feed,create_tables,drop_tables,database
 
 
 
-#----------------------------------#
-
-
 # PARAMETERS #
 app=Flask(__name__)
 app.secret_key="root"
@@ -56,32 +53,16 @@ def All_feed():
         abort(404)
     query=feed.select().where(feed.user_feed==user_id)
     dic={}
-    dicd={}
     liste_url=[key.feed_url for key in query]
     if(len(liste_url)>0):
         for _url in liste_url:  
-            feedparser.RESOLVE_RELATIVE_URIS = 1
             dic=feedparser.parse(_url).entries
-            parsed=feedparser.parse(_url)
-            parrsed=get_source(parsed)
-            logger.debug("Feed (all) : %s",parrsed)
+            logger.debug("Feed (all) : %s")
     else:
         flash("You have not feed,created it")
         return render_template(url_for("index"))    
-    return render_template("vue_all_feed.html",dic=dic,liste_feed_dic=feed_nom_url(),parrsed=parrsed)
+    return render_template("vue_all_feed.html",dic=dic,liste_feed_dic=feed_nom_url())
 
-@app.route('/feed/feed', methods=['GET', 'POST'])
-@login_required
-def feed_nom_url():
-    try:
-        user_id = current_user.get_id() # return username in get_id()
-    except Entry.DoesNotExist:
-        abort(404)
-    query=feed.select().where(feed.user_feed==user_id)
-    liste_feed=[(key.feed_nom,key.feed_url) for key in query]
-    liste_feed_dic=dict(liste_feed)
-    return liste_feed_dic
-   
 @app.route('/feed/<slug>', methods=['GET', 'POST'])
 @login_required
 def feed_nom(slug):
@@ -90,7 +71,6 @@ def feed_nom(slug):
     except Entry.DoesNotExist:
         abort(404)
     query=feed.select(feed.feed_url).where(feed.user_feed==user_id,feed.feed_nom==slug)
-  
     liste_url=[key.feed_url for key in query]
     if(len(liste_url)>0):
         for _url in liste_url:  
@@ -103,8 +83,6 @@ def feed_nom(slug):
 
 
 
-
-
 @app.route('/add_feed', methods=['GET', 'POST'])
 @login_required
 def add_feed():
@@ -114,13 +92,16 @@ def add_feed():
         abort(404)
     form=FeedForm()
     if form.validate_on_submit():
-        myfeed=feed(feed_nom=form.feed_nom.data,feed_url=form.feed_url.data,feed_date=form.feed_date.data,user_feed=user_id)
+        myfeed=feed(
+            feed_nom=form.feed_nom.data,
+            feed_url=form.feed_url.data,
+            feed_date=form.feed_date.data,
+            user_feed=user_id)
         myfeed.save()
         flash('Your feed is save !!')
         return redirect(url_for('index'))
     return render_template('index.html',form=form)
 
-      
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -151,9 +132,25 @@ def signup():
         form.populate_obj(user)
         user.save(force_insert=True)
         flash('Your account are been created')
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('index'))
     return render_template('index.html', form=form)
 
+
+
+
+
+
+
+def feed_nom_url():
+    try:
+        user_id = current_user.get_id() # return username in get_id()
+    except Entry.DoesNotExist:
+        abort(404)
+    query=feed.select().where(feed.user_feed==user_id)
+    liste_feed=[(key.feed_nom,key.feed_url) for key in query]
+    liste_feed_dic=dict(liste_feed)
+    return liste_feed_dic
+   
 
 @app.route('/logout')
 def logout():

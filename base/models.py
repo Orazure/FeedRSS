@@ -8,8 +8,6 @@ from wtfpeewee.orm import model_form
 database = SqliteDatabase("myfeed.sqlite3")
 
 
-
-
 class BaseModel(Model):
     class Meta:
         database = database
@@ -23,6 +21,7 @@ class User(BaseModel,UserMixin):
     def is_active(self):
         """True, as all users are active."""
         return True
+        
     def is_authenticated(self):
         return True
 

@@ -2,21 +2,25 @@
 
 
 {% block body %}
-<h2>Creation de votre compte</h2>
-<form method="POST">
-    {% for field in form %}
-        {% if field.widget.input_type != 'hidden' %}
-            {% print(field.label) %}
-            {% if field.errors %}
-                {% for error in field.errors %}
-                <div class="alert alert-error">{% print(error) %}</div>
-                {% endfor %}
+<div id="container">
+    <h1>Add a feed</h1>
+    <form method="POST">
+        {% for field in form %}
+            <p>
+            {% if field.widget.input_type != 'hidden' %}
+                {% print(field.label) %}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                    <div class="alert alert-error">{% print(error) %}</div>
+                    {% endfor %}
+                {% endif %}
             {% endif %}
-        {% endif %}
-    
-        {{ field() }}
-    {% endfor %}
-    <button type="submit">Save</button>
-</form>
+            <br>
+            {{ field() }}
+            </p>
+        {% endfor %}
+        <button type="submit">Save</button>
+    </form>
+</div>
 
 {% endblock %}

@@ -22,7 +22,8 @@ random = "*"
 flask-restful = "*"
 pytest = "*"
 logging = "*"
-beautifulsoup4 = "*"
+wtfomrs = "*"
+wtforms = "*"
 
 [requires]
 python_version = "3.7"

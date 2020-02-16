@@ -1,40 +1,25 @@
 {% extends "base.html" %}
 
 {% block body %}
-
 {% for e in dic %}
-<h1>titre {{ e.title }}</h1>
-<p> publication{{ e.published }}</p>
-<p>Description{{ e.summary }}</p>
+<h1>{{ e.title }}</h1>
+<p>{{ e.published }}</p>
+<p>{{ e.description | safe }}</p>
 <p><a href="{{ e.link }}">Liens de l'article</a></p>
-<img src={{e.summary_detail.image}} alt=" l'image n'est pas affichée">
-<p>fff{{ e.content  }}</p>
-<p>fff{{ e.media_content  }}</p>
+
 
 {% endfor %}
-
-
-{% for ab in parrsed %}
-<p> {{ ab.title }}</p>
-<p> {{ ab.subtitle }}</p>
-<p> {{ ab.image }}</p>
-{% endfor %}
-
-
-
-
-
-
-
 
 <h2>My Feed</h2>
 {% for key,value in liste_feed_dic.items() %}
-<a href="{{ url_for('feed_nom', slug=key) }}">
-    <p>{{ key }}</p>
-</a>    
-<p>{{ value }}</p>
-
-
+<div id="container-feed">
+    <a href="{{ url_for('feed_nom', slug=key) }}">
+        <p>{{ key }}</p>
+    </a>
+    <p>{{ value }}</p>
+</div>
 {% endfor %}
+
+
 
 {% endblock %}

@@ -3,8 +3,9 @@
 {% block body %}
 
 {% for user in query %}
-<h1> {{ user.username }}</h1>
-
+<div id="container">
+    <h1> {{ user.username }}</h1>
+</div>
 {% endfor %}
 
 {% endblock %}
