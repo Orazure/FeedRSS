@@ -25,4 +25,3 @@ def test_some_dino(client):
     assert b"https://allosaurus.delahayeyourself.info/static/img/dinosaurs/velociraptor.jpg"in res.data
 
 
-
