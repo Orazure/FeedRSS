@@ -128,17 +128,11 @@ def login():
 def signup():
     user=User()
     form=UserForm()
-    query=User.select().where(user.user_username==form.user_username)
-    liste_url=[key.user_username for key in query]
-    print(liste_url)
-    if(len(liste_url)<1):
-        if form.validate_on_submit():
-            form.populate_obj(user)
-            user.save(force_insert=True)
-            flash('Your account are been created')
-            return redirect(url_for('index'))
-    else:
-        flash('Change your username')
+    if form.validate_on_submit():
+        form.populate_obj(user)
+        user.save(force_insert=True)
+        flash('Your account are been created')
+        return redirect(url_for('index'))
     return render_template('index.html', form=form)
 
 
