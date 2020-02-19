@@ -20,7 +20,7 @@ api = Api(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager._login_disabled = False
+
 
 
 @login_manager.user_loader
@@ -60,7 +60,7 @@ def All_feed():
             logger.debug("Feed (all) : %s")
     else:
         flash("You have not feed,created it")
-        return render_template(url_for("index"))    
+        return redirect(url_for('index'))    
     return render_template("vue_all_feed.html",dic=dic,liste_feed_dic=feed_nom_url())
 
 @app.route('/feed/<slug>', methods=['GET', 'POST'])
@@ -100,7 +100,7 @@ def add_feed():
         myfeed.save()
         flash('Your feed is save !!')
         return redirect(url_for('index'))
-    return render_template('index.html',form=form)
+    return render_template('add_feed.html',form=form)
 
 
 
@@ -128,11 +128,17 @@ def login():
 def signup():
     user=User()
     form=UserForm()
-    if form.validate_on_submit():
-        form.populate_obj(user)
-        user.save(force_insert=True)
-        flash('Your account are been created')
-        return redirect(url_for('index'))
+    query=User.select().where(user.user_username==form.user_username)
+    liste_url=[key.user_username for key in query]
+    print(liste_url)
+    if(len(liste_url)<1):
+        if form.validate_on_submit():
+            form.populate_obj(user)
+            user.save(force_insert=True)
+            flash('Your account are been created')
+            return redirect(url_for('index'))
+    else:
+        flash('Change your username')
     return render_template('index.html', form=form)
 
 
@@ -140,8 +146,10 @@ def signup():
 
 
 
-
 def feed_nom_url():
+    """
+    retourne Url du feed
+    """
     try:
         user_id = current_user.get_id() # return username in get_id()
     except Entry.DoesNotExist:
