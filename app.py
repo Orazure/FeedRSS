@@ -20,7 +20,7 @@ api = Api(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
+#login_manager._login_disabled = False
 
 
 @login_manager.user_loader
@@ -38,7 +38,7 @@ def index():
         flash(session['username'])
         return render_template('base.html')
     else:
-        flash("Please ,you must to connecting")
+        flash("Please, login")
         return redirect(url_for('signup'))
     return render_template('base.html')
 
@@ -59,8 +59,8 @@ def All_feed():
             dic=feedparser.parse(_url).entries
             logger.debug("Feed (all) : %s")
     else:
-        flash("You have not feed,created it")
-        return redirect(url_for('index'))    
+        flash("You havn't feeds, create one")
+        return render_template(url_for("index"))    
     return render_template("vue_all_feed.html",dic=dic,liste_feed_dic=feed_nom_url())
 
 @app.route('/feed/<slug>', methods=['GET', 'POST'])
@@ -75,9 +75,9 @@ def feed_nom(slug):
     if(len(liste_url)>0):
         for _url in liste_url:  
             dic=feedparser.parse(_url).entries
-            logger.debug("c'est la merde %s")
+            logger.debug("bruh ... %s")
     else:
-        flash("Not found this feed")
+        flash("Feed not found")
         return render_template(url_for("All_feed"))
     return render_template("vue_all_feed.html",dic=dic,liste_feed_dic=feed_nom_url())
 
@@ -131,19 +131,11 @@ def signup():
     if form.validate_on_submit():
         form.populate_obj(user)
         user.save(force_insert=True)
-        flash('Your account are been created')
+        flash('Your account have been created')
         return redirect(url_for('index'))
     return render_template('index.html', form=form)
 
-
-
-
-
-
 def feed_nom_url():
-    """
-    retourne Url du feed
-    """
     try:
         user_id = current_user.get_id() # return username in get_id()
     except Entry.DoesNotExist:
@@ -163,7 +155,7 @@ def logout():
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return "Impossible !! You must first login to access it"
+    return "Impossible !! You must login first to access it"
 
 
 

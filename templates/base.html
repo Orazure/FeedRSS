@@ -13,8 +13,8 @@
   <div class="element">
   <a href="{{ url_for('index') }}">Home</a>
   {% if current_user.is_authenticated %}
-    <a href="{{ url_for('add_feed') }}">Ajouter un feed</a>
-    <a href="{{ url_for('All_feed') }}">Voir les feed(s)</a>
+    <a href="{{ url_for('add_feed') }}">Add a feed</a>
+    <a href="{{ url_for('All_feed') }}">See feeds</a>
     <a href="{{ url_for('logout') }}">Logout</a>
     {% else %}
     <a href="{{ url_for('login') }}">Login</a>
