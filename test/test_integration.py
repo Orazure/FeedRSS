@@ -4,24 +4,38 @@ import requests
 from app import app
 from flask import url_for
 
+
 @pytest.fixture
 def client():
-    app.config['TESTING'] = True
-    app.config['SERVER_NAME'] = 'test'
+    app.config['TESTING'] = True 
+    app.config['SERVER_NAME'] = 'TEST'
     client = app.test_client()
     with app.app_context():
-        pass
+        pass 
     app.app_context().push()
     yield client
-#test de nos listes dino dans les pages respectives
-def test_dino(client):
-    response = client.get('/')
+
+def test_Login(client):
+    response = client.get('/login')
     assert 200 == response.status_code
-    
-def test_some_dino(client):
-    res = client.get("/dinosaur/velociraptor")
-    assert res.status_code == 200
-    assert b"velociraptor" in res.data
-    assert b"https://allosaurus.delahayeyourself.info/static/img/dinosaurs/velociraptor.jpg"in res.data
+    assert b'Sign in' in response.data
+   
+def test_AddFeed(client):
+    response = client.get('/add_feed')
+    assert 200 == response.status_code
+    assert b'Impossible' in response.data
 
+def test_AllFeed(client):
+    response = client.get('/feed/all_feed')
+    assert 200 == response.status_code
+    assert b'Impossible' in response.data
 
+def test_Home(client):
+    response = client.get('/signup')
+    assert 200 == response.status_code
+    assert b'login' in response.data
+
+def test_logOut(client):
+    response = client.get('/logout')
+    assert 200 == response.status_code
+    assert b'Home' in response.data
