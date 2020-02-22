@@ -1,15 +1,28 @@
+<<<<<<< HEAD
 import requests,click,wtforms,feedparser,random,logging
 
 from base.feed import *
 from log import *
 from flask_restful import Resource, Api
+=======
+# IMPORT AND FROM #
+import requests,click,wtforms
+
+>>>>>>> bcf9ccfaecdf8dc0e7561f1b6574af757e57297b
 from peewee import *
 from wtfpeewee.orm import model_form
 from flask_wtf import FlaskForm
 from flask import Flask, flash, redirect, render_template, request, url_for,session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+<<<<<<< HEAD
 from base.forms import *
 from base.models import User,feed,create_tables,drop_tables,database
+=======
+from test.forms import *
+from test.models import User,feed,create_tables,drop_tables,database
+
+
+>>>>>>> bcf9ccfaecdf8dc0e7561f1b6574af757e57297b
 
 
 
@@ -20,7 +33,11 @@ api = Api(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+<<<<<<< HEAD
 #login_manager._login_disabled = False
+=======
+login_manager._login_disabled = False
+>>>>>>> bcf9ccfaecdf8dc0e7561f1b6574af757e57297b
 
 
 @login_manager.user_loader
@@ -86,6 +103,7 @@ def feed_nom(slug):
 @app.route('/add_feed', methods=['GET', 'POST'])
 @login_required
 def add_feed():
+<<<<<<< HEAD
     try:
         user_id = current_user.get_id() # return username in get_id()
     except Entry.DoesNotExist:
@@ -97,6 +115,12 @@ def add_feed():
             feed_url=form.feed_url.data,
             feed_date=form.feed_date.data,
             user_feed=user_id)
+=======
+    user_id = current_user.get_id() # return username in get_id()
+    form=FeedForm()
+    if form.validate_on_submit():
+        myfeed=feed(feed_nom=form.feed_nom.data,feed_url=form.feed_url.data,feed_date=form.feed_date.data,user_feed=user_id)
+>>>>>>> bcf9ccfaecdf8dc0e7561f1b6574af757e57297b
         myfeed.save()
         flash('Your feed is save !!')
         return redirect(url_for('index'))
@@ -107,11 +131,16 @@ def add_feed():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    print('ici')
     if form.validate_on_submit():
         try:
             user =User.get(User.user_username == form.username.data)
             if user.user_password==form.password.data:
+<<<<<<< HEAD
                 #user.is_authenticated = True
+=======
+                user.is_authenticated = True
+>>>>>>> bcf9ccfaecdf8dc0e7561f1b6574af757e57297b
                 login_user(user)
                 session['username'] = request.form['username']
                 flash("You're now logged in!")
@@ -131,8 +160,13 @@ def signup():
     if form.validate_on_submit():
         form.populate_obj(user)
         user.save(force_insert=True)
+<<<<<<< HEAD
         flash('Your account have been created')
         return redirect(url_for('index'))
+=======
+        flash('Your account are been created')
+        return redirect(url_for('dashboard'))
+>>>>>>> bcf9ccfaecdf8dc0e7561f1b6574af757e57297b
     return render_template('index.html', form=form)
 
 def feed_nom_url():
@@ -155,9 +189,14 @@ def logout():
 
 @login_manager.unauthorized_handler
 def unauthorized():
+<<<<<<< HEAD
     return "Impossible !! You must login first to access it"
 
 
+=======
+    # do stuff
+    return "Impossible !! You must first login to access it"
+>>>>>>> bcf9ccfaecdf8dc0e7561f1b6574af757e57297b
 
 # FONCTIONS #
 
@@ -176,3 +215,4 @@ def dropdb():
 
 if __name__=='__main__':
     app.run()
+    app.debug = True

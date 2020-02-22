@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block body %}
+<<<<<<< HEAD
     <div id="container">
         <h1>Sign in</h1>
         <form action="" method="post" novalidate>
@@ -18,4 +19,20 @@
             <button type="submit">Sign in</button>
         </form>
     </div>
+=======
+    <h1>Sign In</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32) }}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}
+        </p>
+       <!--  <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>  -->
+        <p>{{ form.submit() }}</p>
+    </form>
+>>>>>>> bcf9ccfaecdf8dc0e7561f1b6574af757e57297b
 {% endblock %}
