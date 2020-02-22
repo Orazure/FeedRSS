@@ -52,10 +52,9 @@ h2
 #navbar .flashes {
     font-size: 16px;
     color: white;
-    line-height: 20px;
+    line-height: 15px;
     white-space: nowrap;
     padding: 10px 5px;
-    white-space: nowrap;
 }
 #navbar .flashes div {
     white-space: nowrap;
